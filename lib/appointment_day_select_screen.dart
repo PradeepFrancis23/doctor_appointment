@@ -3,13 +3,16 @@ import 'package:doctor_appointment/card_widget.dart';
 import 'package:flutter/material.dart';
 
 class AppoinmentScreen extends StatefulWidget {
-  const AppoinmentScreen({super.key});
+   
+   AppoinmentScreen({super.key,});
 
   @override
   State<AppoinmentScreen> createState() => _AppoinmentScreenState();
 }
 
 class _AppoinmentScreenState extends State<AppoinmentScreen> {
+   
+
   var _addCard = 3;
   // **increment fucnt
   void _incrementCard() {
