@@ -13,14 +13,7 @@ class AppoinmentScreen extends StatefulWidget {
 class _AppoinmentScreenState extends State<AppoinmentScreen> {
    
 
-  var _addCard = 3;
-  // **increment fucnt
-  void _incrementCard() {
-    setState(() {
-      _addCard++;
-    });
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +22,7 @@ class _AppoinmentScreenState extends State<AppoinmentScreen> {
       ),
 
       body: const CardWidget(),
-      // ListView.builder(
-      //     itemCount: _addCard,
-      //     itemBuilder: (context, index) => const NewCardWidget()),
+     
     );
   }
 }

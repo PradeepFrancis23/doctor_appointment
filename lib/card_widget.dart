@@ -99,311 +99,357 @@ class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: _addCard,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Container(
-                  height: 300,
-                  width: 500,
-                  child: Card(
-                    semanticContainer: true,
-                    shape: const RoundedRectangleBorder(
-                      //<-- SEE HERE
-                      side: BorderSide(
-                        color: Colors.greenAccent,
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //  dd for day seletion
-                              DropdownButtonHideUnderline(
-                                child: DropdownButton2(
-                                  isExpanded: true,
-                                  hint: Row(
+        body: Container(
+          child: ListView.builder(
+            itemCount: _addCard,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      height: 320,
+                      width: 480,
+                      child: Card(
+                        semanticContainer: true,
+                        shape: const RoundedRectangleBorder(
+                          //<-- SEE HERE
+                          side: BorderSide(
+                            color: Colors.greenAccent,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage:
+                                        AssetImage('assets/images/doctor.jpg'),
+                                    // backgroundImage: NetworkImage(
+                                    //     "https://thumbs.dreamstime.com/b/female-doctor-avatar-character-icon-vector-illustration-design-177868552.jpg"),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: const [
-                                      Icon(
-                                        Icons.list,
-                                        size: 16,
-                                        color: Colors.yellow,
-                                      ),
+                                      Text('Name: Dr Rupali Kumar'),
                                       SizedBox(
-                                        width: 4,
+                                        height: 7,
                                       ),
-                                      Text(
-                                        'Select Day',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.yellow,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                                      Text('Specialist: Eye/Skin'),
+                                      SizedBox(
+                                        height: 7,
                                       ),
+                                      Text('Rating: 5 Star'),
+                                      SizedBox(
+                                        height: 7,
+                                      ),
+                                      Text('Address: Mumbai Matunga 400022'),
                                     ],
                                   ),
-                                  items: items
-                                      .map((item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
+
+                                  //  dd for day seletion
+                                  // DropdownButtonHideUnderline(
+                                  //   child: DropdownButton2(
+                                  //     isExpanded: true,
+                                  //     hint: Row(
+                                  //       children: const [
+                                  //         Icon(
+                                  //           Icons.list,
+                                  //           size: 16,
+                                  //           color: Colors.yellow,
+                                  //         ),
+                                  //         SizedBox(
+                                  //           width: 4,
+                                  //         ),
+                                  //         Text(
+                                  //           'Select Day',
+                                  //           style: TextStyle(
+                                  //             fontSize: 14,
+                                  //             fontWeight: FontWeight.bold,
+                                  //             color: Colors.yellow,
+                                  //           ),
+                                  //           overflow: TextOverflow.ellipsis,
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //     items: items
+                                  //         .map((item) => DropdownMenuItem<String>(
+                                  //               value: item,
+                                  //               child: Text(
+                                  //                 item,
+                                  //                 style: const TextStyle(
+                                  //                   fontSize: 14,
+                                  //                   fontWeight: FontWeight.bold,
+                                  //                   color: Colors.white,
+                                  //                 ),
+                                  //                 overflow: TextOverflow.ellipsis,
+                                  //               ),
+                                  //             ))
+                                  //         .toList(),
+                                  //     value: selectedValue,
+                                  //     onChanged: (value) {
+                                  //       //  if(selectedValue == 'Monday'){
+
+                                  //       //  }
+
+                                  //       setState(() {
+                                  //         // iff dd value is monday then make visble monday card
+                                  //         // ignore: unrelated_type_equality_checks
+
+                                  //         selectedValue = value as String;
+
+                                  //       });
+                                  //     },
+                                  //     buttonStyleData: ButtonStyleData(
+                                  //       height: 50,
+                                  //       width: 160,
+                                  //       padding: const EdgeInsets.only(
+                                  //           left: 14, right: 14),
+                                  //       decoration: BoxDecoration(
+                                  //         borderRadius: BorderRadius.circular(14),
+                                  //         border: Border.all(
+                                  //           color: Colors.black26,
+                                  //         ),
+                                  //         color: Colors.redAccent,
+                                  //       ),
+                                  //       elevation: 2,
+                                  //     ),
+                                  //     iconStyleData: const IconStyleData(
+                                  //       icon: Icon(
+                                  //         Icons.arrow_forward_ios_outlined,
+                                  //       ),
+                                  //       iconSize: 14,
+                                  //       iconEnabledColor: Colors.yellow,
+                                  //       iconDisabledColor: Colors.grey,
+                                  //     ),
+                                  //     dropdownStyleData: DropdownStyleData(
+                                  //       maxHeight: 200,
+                                  //       width: 200,
+                                  //       padding: null,
+                                  //       decoration: BoxDecoration(
+                                  //         borderRadius: BorderRadius.circular(14),
+                                  //         color: Colors.redAccent,
+                                  //       ),
+                                  //       elevation: 8,
+                                  //       offset: const Offset(-20, 0),
+                                  //       scrollbarTheme: ScrollbarThemeData(
+                                  //         radius: const Radius.circular(40),
+                                  //         thickness:
+                                  //             MaterialStateProperty.all<double>(6),
+                                  //         thumbVisibility:
+                                  //             MaterialStateProperty.all<bool>(true),
+                                  //       ),
+                                  //     ),
+                                  //     menuItemStyleData: const MenuItemStyleData(
+                                  //       height: 40,
+                                  //       padding:
+                                  //           EdgeInsets.only(left: 14, right: 14),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  // const SizedBox(
+                                  //   width: 150,
+                                  // ),
+                                  IconButton(
+                                      onPressed: () {
+                                        _decrementCard(this);
+                                      },
+                                      icon: const Icon(Icons.delete))
+                                ],
+                              ),
+                              // timing for appointment
+                            ),
+                            Divider(),
+
+                            Text(
+                              'Book your Appointment Day  ',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: bColor.withOpacity(0.6),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            // **DAy Slot
+                            Container(
+                              height: 50,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 7,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (index == 0) {
+                                            selectValue = index + 1;
+                                          } else if (index == 1) {
+                                            selectValue = index + 3;
+                                          } else {
+                                            selectValue = index;
+                                          }
+
+                                          // ignore: unrelated_type_equality_checks
+                                          _selectedDayIndex = index;
+                                          _goToElement(selectValue);
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 5,
+                                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 25),
+                                        decoration: BoxDecoration(
+                                          color: index == _selectedDayIndex
+                                              ? pColor
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Color.fromARGB(
+                                                  255, 61, 59, 59),
+                                              blurRadius: 4,
+                                              spreadRadius: 0,
                                             ),
-                                          ))
-                                      .toList(),
-                                  value: selectedValue,
-                                  onChanged: (value) {
-                                    //  if(selectedValue == 'Monday'){
-
-                                    //  }
-
-                                    setState(() {
-                                      // iff dd value is monday then make visble monday card
-                                      // ignore: unrelated_type_equality_checks
-
-                                      selectedValue = value as String;
-                                      print(selectedValue);
-                                    });
-                                  },
-                                  buttonStyleData: ButtonStyleData(
-                                    height: 50,
-                                    width: 160,
-                                    padding: const EdgeInsets.only(
-                                        left: 14, right: 14),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      border: Border.all(
-                                        color: Colors.black26,
+                                          ],
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              days[index],
+                                              style: const TextStyle(
+                                                  // color: index == 1
+                                                  //     ? wColor
+                                                  //     : bColor.withOpacity(0.6),
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      color: Colors.redAccent,
-                                    ),
-                                    elevation: 2,
-                                  ),
-                                  iconStyleData: const IconStyleData(
-                                    icon: Icon(
-                                      Icons.arrow_forward_ios_outlined,
-                                    ),
-                                    iconSize: 14,
-                                    iconEnabledColor: Colors.yellow,
-                                    iconDisabledColor: Colors.grey,
-                                  ),
-                                  dropdownStyleData: DropdownStyleData(
-                                    maxHeight: 200,
-                                    width: 200,
-                                    padding: null,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(14),
-                                      color: Colors.redAccent,
-                                    ),
-                                    elevation: 8,
-                                    offset: const Offset(-20, 0),
-                                    scrollbarTheme: ScrollbarThemeData(
-                                      radius: const Radius.circular(40),
-                                      thickness:
-                                          MaterialStateProperty.all<double>(6),
-                                      thumbVisibility:
-                                          MaterialStateProperty.all<bool>(true),
-                                    ),
-                                  ),
-                                  menuItemStyleData: const MenuItemStyleData(
-                                    height: 40,
-                                    padding:
-                                        EdgeInsets.only(left: 14, right: 14),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 150,
-                              ),
-                              Expanded(
-                                child: IconButton(
-                                    onPressed: () {
-                                      _decrementCard(this);
-                                    },
-                                    icon: const Icon(Icons.delete)),
-                              )
-                            ],
-                          ),
-                          // timing for appointment
-                        ),
+                                    );
+                                  }),
+                            ),
 
-                        Text(
-                          'Book your Appointment Day  ',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: bColor.withOpacity(0.6),
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        // **DAy Slot
-                        Container(
-                          height: 50,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 7,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (index == 0) {
-                                        selectValue = index + 1;
-                                      } else if (index == 1) {
-                                        selectValue = index + 3;
-                                      } else {
-                                        selectValue = index;
-                                      }
-
-                                      // ignore: unrelated_type_equality_checks
-                                      _selectedDayIndex = index;
-                                      _goToElement(selectValue);
-                                    });
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 5,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 25),
-                                    decoration: BoxDecoration(
-                                      color: index == _selectedDayIndex
-                                          ? pColor
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color:
-                                              Color.fromARGB(255, 61, 59, 59),
-                                          blurRadius: 4,
-                                          spreadRadius: 0,
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Book your Appointment Time  ',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: bColor.withOpacity(0.6),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            // **Time Booking Slot
+                            Container(
+                              height: 50,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  controller: _controller,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 7,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedTimeIndex = index;
+                                          selectValue = index;
+                                        });
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 5,
                                         ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          days[index],
-                                          style: const TextStyle(
-                                              // color: index == 1
-                                              //     ? wColor
-                                              //     : bColor.withOpacity(0.6),
-                                              ),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 25),
+                                        decoration: BoxDecoration(
+                                          color: index == selectValue
+                                              ? pColor
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Color.fromARGB(
+                                                  255, 61, 59, 59),
+                                              blurRadius: 4,
+                                              spreadRadius: 0,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Book your Appointment Time  ',
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: bColor.withOpacity(0.6),
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        // **Time Booking Slot
-                        Container(
-                          height: 50,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              controller: _controller,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 7,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedTimeIndex = index;
-                                      selectValue = index;
-                                    });
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 5,
-                                    ),
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 25),
-                                    decoration: BoxDecoration(
-                                      color: index == selectValue
-                                          ? pColor
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color:
-                                              Color.fromARGB(255, 61, 59, 59),
-                                          blurRadius: 4,
-                                          spreadRadius: 0,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              timeSlot[index],
+                                              style: const TextStyle(
+                                                  // color: index == 1
+                                                  //     ? wColor
+                                                  //     : bColor.withOpacity(0.6),
+                                                  ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          timeSlot[index],
-                                          style: const TextStyle(
-                                              // color: index == 1
-                                              //     ? wColor
-                                              //     : bColor.withOpacity(0.6),
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
+                                      ),
+                                    );
+                                  }),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => JsonOutput(
-                                day: _selectedDayIndex.toString(),
-                                timeslot: _selectedTimeIndex.toString(),
-                              )),
-                    );
-                  },
-                  child: const Text('Book Appointment')),
-            ],
-          );
-        },
-      ),
-    );
+                ],
+              );
+            },
+          ),
+        ),
+        floatingActionButton: TextButton.icon(
+            onPressed: () {
+              setState(() {
+                _incrementCard();
+              });
+            },
+            icon: const Icon(Icons.add),
+            label: const Text(
+              'Add More',
+              style: TextStyle(fontSize: 20),
+            )),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
+
+        // ElevatedButton(
+        //     onPressed: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //             builder: (context) => JsonOutput(
+        //                   day: _selectedDayIndex.toString(),
+        //                   timeslot: _selectedTimeIndex.toString(),
+        //                 )),
+        //       );
+        //     },
+        //     child: const Text('Book Appointment')),
+        // out of card list virw buldr
+        );
   }
 }
