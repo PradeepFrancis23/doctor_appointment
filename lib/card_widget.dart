@@ -1,6 +1,10 @@
 import 'dart:convert';
 
 import 'package:doctor_appointment/jsonoutput_screen.dart';
+import 'package:doctor_appointment/models/doctors_model.dart';
+import 'package:doctor_appointment/screens/appointment_status.dart';
+import 'package:doctor_appointment/screens/doctors_list.dart';
+import 'package:doctor_appointment/screens/doctors_profile.dart';
 import 'package:doctor_appointment/services/users.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +18,45 @@ class CardWidget extends StatefulWidget {
 }
 
 class _CardWidgetState extends State<CardWidget> {
+  // ** Dif doctor profile pic
+  List<String> profilePic = [
+    'https://t4.ftcdn.net/jpg/03/64/21/11/360_F_364211147_1qgLVxv1Tcq0Ohz3FawUfrtONzz8nq3e.jpg',
+    'https://expertphotography.b-cdn.net/wp-content/uploads/2020/08/profile-photos-4.jpg',
+    'https://sb.kaleidousercontent.com/67418/960x550/12beafc181/individuals-1.png',
+    'https://d1r8m46oob3o9u.cloudfront.net/images/home-page-examples/04.jpg',
+  ];
+
+  // **Dr name
+  List<String> doctorname = [
+    'Dr Rithika Shah',
+    'Dr Kumar Vishwas',
+    'Dr Suresh K',
+    'Dr Rupali Shah'
+  ];
+  // **DAte and time
+  List<String> appotmDatetime = [
+    '16 Nov Monday 10:30am',
+    '17 Nov Tuesday 11:30am',
+    '18 Nov Wednesday 8:30am',
+    '19 Nov Thursday 10:00am',
+    '20 Nov Friday 9:30am'
+  ];
+  List<String> location = ['Mumbai', 'Chennai', 'Delhi', 'Ladakh', 'Pune'];
+  List<String> degree = [
+    'Mbbs - Surgeon',
+    'Mbbs - Cardiologist',
+    'Mbbs - Orthopedic',
+    'Mbbs - Eye Specialist'
+  ];
+
+  int pageIndex = 0;
+
+  final pages = [
+    const DoctorsProfile(),
+    const Doctorslist(),
+    const AppointmentStatus(),
+    const CardWidget(),
+  ];
   late SharedPreferences sharedPreferences;
 
   ScrollController _controller = new ScrollController();
@@ -51,7 +94,7 @@ class _CardWidgetState extends State<CardWidget> {
     '2 to 3.30 pm',
   ];
 
-  var _addCard = 0;
+  var _addCard = 7;
   // **increment fucnt
   void _incrementCard() {
     setState(() {
@@ -90,26 +133,13 @@ class _CardWidgetState extends State<CardWidget> {
   @override
   void initState() {
     super.initState();
-    _addCard = 1;
+    // _addCard = 1;
     getSavedData();
   }
 
   void getSavedData() async {
     sharedPreferences = await SharedPreferences.getInstance();
   }
-
-  // void storeDAta() {
-  //   Users users = Users(
-  //       _drname, _selectedDayIndex.toString(), _selectedTimeIndex.toString());
-
-  //   // covert into json formar
-  //   String userdata = jsonDecode(users.toString());
-  //   print(userdata);
-
-  //   sharedPreferences.setString('userData', userdata);
-  // }
-
-  // List<Icon> catIcons = [Icons()];
 
   Color wColor = Colors.white;
   Color bColor = Colors.black;
@@ -120,360 +150,313 @@ class _CardWidgetState extends State<CardWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          child: ListView.builder(
-            itemCount: _addCard,
-            itemBuilder: (context, index) {
-              return Dismissible(
-                key: UniqueKey(),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Container(
-                        height: 320,
-                        width: 450,
-                        child: Card(
-                          semanticContainer: true,
-                          shape: const RoundedRectangleBorder(
-                            //<-- SEE HERE
-                            side: BorderSide(
-                              color: Colors.greenAccent,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 40,
-                                      backgroundImage: AssetImage(
-                                          'assets/images/doctor.jpg'),
-                                      // backgroundImage: NetworkImage(
-                                      //     "https://thumbs.dreamstime.com/b/female-doctor-avatar-character-icon-vector-illustration-design-177868552.jpg"),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
+      appBar: AppBar(
+        title: const Center(child: Text('Available Doctors')),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+            itemCount: profilePic.length,
+            itemBuilder: (BuildContext context, int index) {
+              return card(profilePic[index], doctorname[index], degree[index],
+                  location[index], context);
+            }),
+      ),
+    );
+  }
 
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: const [
-                                        Text(_drname),
-                                        SizedBox(
-                                          height: 7,
-                                        ),
-                                        Text('Specialist: Eye/Skin'),
-                                        SizedBox(
-                                          height: 7,
-                                        ),
-                                        Text('Rating: 5 Star'),
-                                        SizedBox(
-                                          height: 7,
-                                        ),
-                                        Text('Address: Mumbai Matunga'),
-                                      ],
-                                    ),
+  Widget card(String image, String title, String degree, String location,
+      BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DoctorsProfile()));
+        },
+        child: Card(
+            color: Colors.yellow[50],
+            elevation: 8.0,
+            margin: const EdgeInsets.all(4.0),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  child: ClipOval(
+                    child: Image.network(
+                      image,
+                      fit: BoxFit.fill,
+                      matchTextDirection: true,
 
-                                    //  dd for day seletion
-                                    // DropdownButtonHideUnderline(
-                                    //   child: DropdownButton2(
-                                    //     isExpanded: true,
-                                    //     hint: Row(
-                                    //       children: const [
-                                    //         Icon(
-                                    //           Icons.list,
-                                    //           size: 16,
-                                    //           color: Colors.yellow,
-                                    //         ),
-                                    //         SizedBox(
-                                    //           width: 4,
-                                    //         ),
-                                    //         Text(
-                                    //           'Select Day',
-                                    //           style: TextStyle(
-                                    //             fontSize: 14,
-                                    //             fontWeight: FontWeight.bold,
-                                    //             color: Colors.yellow,
-                                    //           ),
-                                    //           overflow: TextOverflow.ellipsis,
-                                    //         ),
-                                    //       ],
-                                    //     ),
-                                    //     items: items
-                                    //         .map((item) => DropdownMenuItem<String>(
-                                    //               value: item,
-                                    //               child: Text(
-                                    //                 item,
-                                    //                 style: const TextStyle(
-                                    //                   fontSize: 14,
-                                    //                   fontWeight: FontWeight.bold,
-                                    //                   color: Colors.white,
-                                    //                 ),
-                                    //                 overflow: TextOverflow.ellipsis,
-                                    //               ),
-                                    //             ))
-                                    //         .toList(),
-                                    //     value: selectedValue,
-                                    //     onChanged: (value) {
-                                    //       //  if(selectedValue == 'Monday'){
-
-                                    //       //  }
-
-                                    //       setState(() {
-                                    //         // iff dd value is monday then make visble monday card
-                                    //         // ignore: unrelated_type_equality_checks
-
-                                    //         selectedValue = value as String;
-
-                                    //       });
-                                    //     },
-                                    //     buttonStyleData: ButtonStyleData(
-                                    //       height: 50,
-                                    //       width: 160,
-                                    //       padding: const EdgeInsets.only(
-                                    //           left: 14, right: 14),
-                                    //       decoration: BoxDecoration(
-                                    //         borderRadius: BorderRadius.circular(14),
-                                    //         border: Border.all(
-                                    //           color: Colors.black26,
-                                    //         ),
-                                    //         color: Colors.redAccent,
-                                    //       ),
-                                    //       elevation: 2,
-                                    //     ),
-                                    //     iconStyleData: const IconStyleData(
-                                    //       icon: Icon(
-                                    //         Icons.arrow_forward_ios_outlined,
-                                    //       ),
-                                    //       iconSize: 14,
-                                    //       iconEnabledColor: Colors.yellow,
-                                    //       iconDisabledColor: Colors.grey,
-                                    //     ),
-                                    //     dropdownStyleData: DropdownStyleData(
-                                    //       maxHeight: 200,
-                                    //       width: 200,
-                                    //       padding: null,
-                                    //       decoration: BoxDecoration(
-                                    //         borderRadius: BorderRadius.circular(14),
-                                    //         color: Colors.redAccent,
-                                    //       ),
-                                    //       elevation: 8,
-                                    //       offset: const Offset(-20, 0),
-                                    //       scrollbarTheme: ScrollbarThemeData(
-                                    //         radius: const Radius.circular(40),
-                                    //         thickness:
-                                    //             MaterialStateProperty.all<double>(6),
-                                    //         thumbVisibility:
-                                    //             MaterialStateProperty.all<bool>(true),
-                                    //       ),
-                                    //     ),
-                                    //     menuItemStyleData: const MenuItemStyleData(
-                                    //       height: 40,
-                                    //       padding:
-                                    //           EdgeInsets.only(left: 14, right: 14),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    // const SizedBox(
-                                    //   width: 150,
-                                    // ),
-                                    // IconButton(
-                                    //     onPressed: () {
-                                    //       _decrementCard(this);
-                                    //     },
-                                    //     icon: const Icon(Icons.delete))
-                                  ],
-                                ),
-                                // timing for appointment
-                              ),
-                              Divider(),
-
-                              Text(
-                                'Book your Appointment Day  ',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: bColor.withOpacity(0.6),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              // **DAy Slot
-                              Container(
-                                height: 50,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: 7,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            if (index == 0) {
-                                              selectValue = index + 1;
-                                            } else if (index == 1) {
-                                              selectValue = index + 3;
-                                            } else {
-                                              selectValue = index;
-                                            }
-
-                                            // ignore: unrelated_type_equality_checks
-                                            _selectedDayIndex = index;
-                                            _goToElement(selectValue);
-                                          });
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 5,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 25),
-                                          decoration: BoxDecoration(
-                                            color: index == _selectedDayIndex
-                                                ? pColor
-                                                : Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                color: Color.fromARGB(
-                                                    255, 61, 59, 59),
-                                                blurRadius: 4,
-                                                spreadRadius: 0,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                days[index],
-                                                style: const TextStyle(
-                                                    // color: index == 1
-                                                    //     ? wColor
-                                                    //     : bColor.withOpacity(0.6),
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                              ),
-
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Book your Appointment Time  ',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: bColor.withOpacity(0.6),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              // **Time Booking Slot
-                              Container(
-                                height: 50,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    controller: _controller,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: 7,
-                                    itemBuilder: (context, index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            _selectedTimeIndex = index;
-                                            selectValue = index;
-                                          });
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: 5,
-                                          ),
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 10, horizontal: 25),
-                                          decoration: BoxDecoration(
-                                            color: index == selectValue
-                                                ? pColor
-                                                : Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                color: Color.fromARGB(
-                                                    255, 61, 59, 59),
-                                                blurRadius: 4,
-                                                spreadRadius: 0,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                timeSlot[index],
-                                                style: const TextStyle(
-                                                    // color: index == 1
-                                                    //     ? wColor
-                                                    //     : bColor.withOpacity(0.6),
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    }),
-                              ),
-                            ],
-                          ),
+                      // height: MediaQuery.of(context).size.width * (3 / 4),
+                      // width: MediaQuery.of(context).size.width,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 23.0,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        floatingActionButton: TextButton.icon(
-            onPressed: () {
-              setState(() {
-                _incrementCard();
-              });
-            },
-            icon: const Icon(Icons.add),
-            label: const Text(
-              'Book Your Appointment',
-              style: TextStyle(fontSize: 20),
-            )),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat
-
-        // ElevatedButton(
-        //     onPressed: () {
-        //       Navigator.push(
-        //         context,
-        //         MaterialPageRoute(
-        //             builder: (context) => JsonOutput(
-        //                   day: _selectedDayIndex.toString(),
-        //                   timeslot: _selectedTimeIndex.toString(),
-        //                 )),
-        //       );
-        //     },
-        //     child: const Text('Book Appointment')),
-        // out of card list virw buldr
-        );
+                      Text(
+                        degree,
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        location,
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      //**Rating Start */
+                    ],
+                  ),
+                )
+              ],
+            )
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start,
+            //   children: [
+            //     Padding(
+            //       padding: const EdgeInsets.all(16.0),
+            //       child: Image.network(
+            //         image,
+            //         // height: MediaQuery.of(context).size.width * (3 / 4),
+            //         width: MediaQuery.of(context).size.width,
+            //       ),
+            //     ),
+            //     Text(
+            //       title,
+            //       style: const TextStyle(
+            //         fontSize: 38.0,
+            //         fontWeight: FontWeight.w700,
+            //       ),
+            //     ),
+            //     Text(
+            //       degree,
+            //       style: const TextStyle(
+            //         fontSize: 27.0,
+            //         fontWeight: FontWeight.w700,
+            //       ),
+            //     ),
+            //     Text(
+            //       location,
+            //       style: const TextStyle(
+            //         fontSize: 24.0,
+            //         fontWeight: FontWeight.w700,
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            ),
+      ),
+    );
   }
+  // Scaffold(
+  //   bottomNavigationBar: Container(
+  //     height: 60,
+  //     decoration: BoxDecoration(
+  //       color: Theme.of(context).primaryColor,
+  //       borderRadius: const BorderRadius.only(
+  //         topLeft: Radius.circular(20),
+  //         topRight: Radius.circular(20),
+  //       ),
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+  //       children: [
+  //         IconButton(
+  //           enableFeedback: false,
+  //           onPressed: () {
+  //             Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                     builder: (context) => const CardWidget()));
+  //           },
+  //           icon: const Icon(
+  //             Icons.home_outlined,
+  //             color: Colors.white,
+  //             size: 35,
+  //           ),
+  //         ),
+  //         IconButton(
+  //           enableFeedback: false,
+  //           onPressed: () {
+  //             Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                     builder: (context) => const Doctorslist()));
+  //           },
+  //           icon: const Icon(
+  //             Icons.work_outline_outlined,
+  //             color: Colors.white,
+  //             size: 35,
+  //           ),
+  //         ),
+  //         IconButton(
+  //           enableFeedback: false,
+  //           onPressed: () {
+  //             Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                     builder: (context) => const AppointmentStatus()));
+  //           },
+  //           icon: const Icon(
+  //             Icons.widgets_outlined,
+  //             color: Colors.white,
+  //             size: 35,
+  //           ),
+  //         ),
+  //         IconButton(
+  //           enableFeedback: false,
+  //           onPressed: () {
+  //             Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                     builder: (context) => const DoctorsProfile()));
+  //           },
+  //           icon: const Icon(
+  //             Icons.person_outline,
+  //             color: Colors.white,
+  //             size: 35,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   ),
+  //   appBar: AppBar(
+  //     title: const Text(
+  //       "Find Your Specialist",
+  //     ),
+  //     actions: [
+  //       IconButton(
+  //         onPressed: () {
+  //           // method to show the search bar
+  //           showSearch(
+  //               context: context,
+  //               // delegate to customize the search bar
+  //               delegate: CustomSearchDelegate());
+  //         },
+  //         icon: const Icon(Icons.search),
+  //       ),
+  //     ],
+  //   ),
+  //   body: Container(
+  //     child: ListView.builder(
+  //       scrollDirection: Axis.vertical,
+  //       shrinkWrap: true,
+  //       itemCount: _addCard,
+  //       itemBuilder: (context, index) {
+  //         return Column(
+  //           children: [
+  //             Padding(
+  //               padding: const EdgeInsets.all(12.0),
+  //               child: Container(
+  //                 height: 300,
+  //                 width: 450,
+  //                 child: InkWell(
+  //                   onLongPress: () {},
+  //                   onTap: () {
+  //                     // card press  open doct profile
+  //                     Navigator.push(
+  //                         context,
+  //                         MaterialPageRoute(
+  //                             builder: (context) => const DoctorsProfile()));
+  //                   },
+  //                   child: Card(
+  //                     color: Colors.yellow[50],
+  //                     elevation: 8.0,
+  //                     margin: const EdgeInsets.all(4.0),
+  //                     shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(15)),
+  //                     semanticContainer: true,
+  //                     child: Column(
+  //                       children: [
+  //                         Padding(
+  //                           padding: const EdgeInsets.all(12.0),
+  //                           child: Row(
+  //                             crossAxisAlignment: CrossAxisAlignment.start,
+  //                             children: [
+  //                               const CircleAvatar(
+  //                                 radius: 60,
+  //                                 backgroundImage:
+  //                                     AssetImage('assets/images/doctor.jpg'),
+  //                                 // backgroundImage: NetworkImage(
+  //                                 //     "https://thumbs.dreamstime.com/b/female-doctor-avatar-character-icon-vector-illustration-design-177868552.jpg"),
+  //                               ),
+  //                               const SizedBox(
+  //                                 width: 5,
+  //                               ),
+
+  //                               Column(
+  //                                 crossAxisAlignment:
+  //                                     CrossAxisAlignment.start,
+  //                                 children: const [
+  //                                   Text(
+  //                                     _drname,
+  //                                     style: TextStyle(
+  //                                         fontSize: 22,
+  //                                         fontWeight: FontWeight.bold),
+  //                                   ),
+  //                                   SizedBox(
+  //                                     height: 7,
+  //                                   ),
+  //                                   Text(
+  //                                     'Specialist: Eye/Skin',
+  //                                     style: TextStyle(
+  //                                         fontSize: 17,
+  //                                         fontStyle: FontStyle.italic),
+  //                                   ),
+  //                                   SizedBox(
+  //                                     height: 7,
+  //                                   ),
+  //                                   Text(
+  //                                     'Rating: 5 Star',
+  //                                     style: TextStyle(
+  //                                         fontSize: 17,
+  //                                         fontStyle: FontStyle.italic),
+  //                                   ),
+  //                                   SizedBox(
+  //                                     height: 7,
+  //                                   ),
+  //                                   Text(
+  //                                     'Address: Mumbai Matunga',
+  //                                     style: TextStyle(
+  //                                         fontSize: 17,
+  //                                         fontStyle: FontStyle.italic),
+  //                                   ),
+  //                                 ],
+  //                               ),
+
+  //                               //  dd for day seletion
+  //                             ],
+  //                           ),
+  //                           // timing for appointment
+  //                         ),
+
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //     ),
+  //   ),
+  // );
 }

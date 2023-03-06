@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:doctor_appointment/appointment_day_select_screen.dart';
+import 'package:doctor_appointment/screens/main_home_screen.dart';
 import 'package:doctor_appointment/services/users.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
@@ -110,11 +112,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 60,
                         onPressed: () {
                           // login btn
-                        // if(emailController.text.){
+                          // if(emailController.text.){
 
-                        // }
+                          // }
 
-                         
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                          );
                           storeloginData();
                         },
                         color: Colors.indigoAccent[400],

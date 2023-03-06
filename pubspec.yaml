@@ -42,6 +42,7 @@ dependencies:
   shared_preferences: ^2.0.18
   card_swiper: ^2.0.4
   email_validator: '^2.1.16'
+  day_night_switcher: ^0.2.0+1
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,16 @@ flutter:
   assets:
   - assets/images/doctor.jpg
   - assets/images/homepage_image.jpg
+  - assets/images/splash_image.jpg
+  - assets/images/doctor_search.jpg
+  - assets/images/patientsCount.png
+  - assets/images/exp.png
+  - assets/images/review.jpg
+  - assets/images/linkedin.png.png
+  - assets/images/insta.png
+  - assets/images/fb.png
+  - assets/images/tweet.png
+  - 
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
