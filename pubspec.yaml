@@ -43,6 +43,10 @@ dependencies:
   card_swiper: ^2.0.4
   email_validator: '^2.1.16'
   day_night_switcher: ^0.2.0+1
+  google_fonts: ^4.0.3
+  bloc: ^0.8.0
+  flutter_bloc: ^0.5.0
+  equatable: ^0.1.6
 
 dev_dependencies:
   flutter_test:

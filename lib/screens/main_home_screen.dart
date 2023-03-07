@@ -9,7 +9,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const    HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    darkTheme:
+     darkTheme:
     ThemeData.dark().copyWith(
       appBarTheme: AppBarTheme(color: const Color(0xFF253341)),
       scaffoldBackgroundColor: const Color(0xFF15202B),

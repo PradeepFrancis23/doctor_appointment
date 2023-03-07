@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:doctor_appointment/screens/login_screen.dart';
+import 'package:doctor_appointment/services/signup_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -10,6 +15,24 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  TextEditingController fullnamecontroller = TextEditingController();
+  TextEditingController phonenumber = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmpasswordController = TextEditingController();
+  final GlobalKey<FormState> _signupFormKey = GlobalKey<FormState>();
+
+  SharedPreferences? _sharedPreferences;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+
+    initializedGetSavedData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +72,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Text(
@@ -59,25 +82,73 @@ class _SignupScreenState extends State<SignupScreen> {
                             color: Colors.grey[700],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         )
                       ],
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: Column(
-                        children: [
-                          makeInput(label: "Email"),
-                          makeInput(label: "Password", obsureText: true),
-                          makeInput(label: "Confirm Pasword", obsureText: true)
-                        ],
+                      child: Form(
+                        key: _signupFormKey,
+                        child: Column(
+                          children: [
+                            makeInput(
+                                label: "Full Name",
+                                controller: fullnamecontroller,
+                                validator: (value) {
+                                  if (fullnamecontroller.text.isValidName) {
+                                    print('fullname emty');
+                                    return 'Enter valid name';
+                                  }
+                                }),
+                            makeInput(
+                                label: "Phone Number",
+                                controller: phonenumber,
+                                validator: (value) {
+                                  if (phonenumber.text.isValidPhone) {
+                                    print('phone npo emty');
+                                    return 'Enter Valida Phone Number';
+                                  }
+                                }),
+                            makeInput(
+                                label: "Email",
+                                controller: emailController,
+                                validator: (value) {
+                                  if (emailController.text.isValidEmail) {
+                                    print('email emty');
+                                    return 'Enter valid Email';
+                                  }
+                                }),
+                            makeInput(
+                                label: "Password",
+                                obsureText: true,
+                                controller: passwordController,
+                                validator: (value) {
+                                  if (passwordController.text.isValidPassword) {
+                                    print('passw emty');
+                                    return 'Enter Valid Password';
+                                  }
+                                }),
+                            makeInput(
+                                label: "Confirm Pasword",
+                                obsureText: true,
+                                controller: confirmpasswordController,
+                                validator: (value) {
+                                  if (confirmpasswordController
+                                      .text.isValidConfirmPassword) {
+                                    print('confirmpass emty');
+                                    return 'Enter Valid Confirm Password';
+                                  }
+                                })
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: Container(
-                        padding: EdgeInsets.only(top: 3, left: 3),
+                        padding: const EdgeInsets.only(top: 3, left: 3),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(40),
                             border: const Border(
@@ -88,7 +159,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: MaterialButton(
                           minWidth: double.infinity,
                           height: 60,
-                          onPressed: () {},
+                          onPressed: () {
+                            // **login screen
+                            _submit();
+                            storeSignupData();
+                          },
                           color: Colors.redAccent,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40)),
@@ -107,12 +182,21 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Already have an account? "),
-                        Text(
-                          "Login",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
+                      children: [
+                        const Text("Already have an account? "),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                            );
+                          },
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          ),
                         ),
                       ],
                     )
@@ -125,9 +209,33 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+
+  void storeSignupData() {
+    UserSignupModel userSignupModel = UserSignupModel(
+        fullnamecontroller.text,
+        phonenumber.text,
+        emailController.text,
+        passwordController.text,
+        confirmpasswordController.text);
+    // this wiil store input data in json format and encode it
+    String usersignupDataJsonEncoding = jsonEncode(userSignupModel);
+    print(usersignupDataJsonEncoding);
+    _sharedPreferences?.setString(
+        'userDataJsonEncoding', usersignupDataJsonEncoding);
+  }
+
+  void _submit() {
+    final isValid = _signupFormKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    _signupFormKey.currentState!.save();
+  }
 }
 
-Widget makeInput({label, obsureText = false}) {
+void initializedGetSavedData() {}
+
+Widget makeInput({label, obsureText = false, controller, validator}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -139,7 +247,9 @@ Widget makeInput({label, obsureText = false}) {
       const SizedBox(
         height: 5,
       ),
-      TextField(
+      TextFormField(
+        validator: validator,
+        controller: controller,
         obscureText: obsureText,
         decoration: const InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -155,4 +265,38 @@ Widget makeInput({label, obsureText = false}) {
       )
     ],
   );
+}
+
+extension Extstring on String {
+  bool get isValidEmail {
+    final emailRegExp = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    return emailRegExp.hasMatch(this);
+  }
+
+  bool get isValidName {
+    final nameRegExp =
+        new RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
+    return nameRegExp.hasMatch(this);
+  }
+
+  bool get isValidPassword {
+    final passwordRegExp = RegExp(
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\><*~]).{8,}/pre>');
+    return passwordRegExp.hasMatch(this);
+  }
+
+  bool get isNotNull {
+    return this != null;
+  }
+
+  bool get isValidPhone {
+    final phoneRegExp = RegExp(r"^\+?0[0-9]{10}$");
+    return phoneRegExp.hasMatch(this);
+  }
+
+  bool get isValidConfirmPassword {
+    final confirmPassRegex = RegExp(
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\><*~]).{8,}/pre>');
+    return confirmPassRegex.hasMatch(this);
+  }
 }

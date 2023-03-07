@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:doctor_appointment/jsonoutput_screen.dart';
+
 import 'package:doctor_appointment/models/doctors_model.dart';
 import 'package:doctor_appointment/screens/appointment_status.dart';
 import 'package:doctor_appointment/screens/doctors_list.dart';

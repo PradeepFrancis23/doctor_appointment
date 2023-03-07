@@ -1,6 +1,6 @@
 import 'package:doctor_appointment/appointment_day_select_screen.dart';
 import 'package:doctor_appointment/card_widget.dart';
-import 'package:doctor_appointment/new_card_screen.dart';
+
 import 'package:doctor_appointment/screens/appointment_status.dart';
 import 'package:doctor_appointment/screens/doctors_profile.dart';
 import 'package:doctor_appointment/screens/home_login_signup.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
       ),
-      home: const HomeScreen(),
+      home: const SignupScreen(),
     );
   }
 }

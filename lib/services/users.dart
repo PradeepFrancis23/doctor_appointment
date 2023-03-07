@@ -11,16 +11,7 @@ class Users {
       : email = json['email'],
         password = json['password'];
 
-  //  methi that converrts object to json instance
-  // Map<String,dynamic> toJson() => {
-  //       'email': email,
-  //       'password': password,
-
-  //     }
-  // Map<String,dynamic> toJson() =>{
-  //     'email';email,
-  //     'password':password;
-  // };
+  
 
   Map<String, dynamic> toJson() => {
         'email': email,

@@ -4,6 +4,7 @@ import 'package:doctor_appointment/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        const Duration(seconds: 3),
+        const Duration(seconds: 6),
         () => Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const LoginScreen())));
   }
@@ -25,23 +26,28 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            color: Colors.white,
-            child: const Padding(
-              padding: EdgeInsets.all(50.0),
-              child: Image(
-                  image: AssetImage(
-                'assets/images/splash_image.jpg',
-              )),
+        backgroundColor: Colors.blue,
+        body: Container(
+          child: Center(
+            child: Text(
+              ' Step3 klinic ',
+              style: GoogleFonts.lobster(
+                textStyle: const TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 239, 243, 245),
+                    letterSpacing: .5),
+              ),
+              // GoogleFonts.Roboto(
+              //   textStyle: const TextStyle(
+              //       fontSize: 25,
+              //       fontWeight: FontWeight.bold,
+              //       color: Color.fromARGB(255, 239, 243, 245),
+              //       letterSpacing: .5),
+              // ),
             ),
-
-            // const Image(image: AssetImage('assets/images/homepage_image.jpg'))
           ),
-          Text('data'),
-        ],
-      ),
-    );
+          
+        ));
   }
 }
