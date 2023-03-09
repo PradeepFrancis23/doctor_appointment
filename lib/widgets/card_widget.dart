@@ -2,9 +2,12 @@ import 'dart:convert';
 
 
 import 'package:doctor_appointment/models/doctors_model.dart';
-import 'package:doctor_appointment/screens/appointment_status.dart';
-import 'package:doctor_appointment/screens/doctors_list.dart';
-import 'package:doctor_appointment/screens/doctors_profile.dart';
+import 'package:doctor_appointment/screens/appointments_status_check/appointment_status.dart';
+
+import 'package:doctor_appointment/screens/doctors_info_screens/doctors_list.dart';
+import 'package:doctor_appointment/screens/doctors_info_screens/doctors_profile.dart';
+
+
 import 'package:doctor_appointment/services/users.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';

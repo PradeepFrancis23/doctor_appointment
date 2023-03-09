@@ -1,5 +1,7 @@
-import 'package:doctor_appointment/screens/login_screen.dart';
-import 'package:doctor_appointment/screens/signup_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/signup_screen.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

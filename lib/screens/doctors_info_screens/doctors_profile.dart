@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:doctor_appointment/screens/appointment_status.dart';
-import 'package:doctor_appointment/screens/home_login_signup.dart';
-import 'package:doctor_appointment/screens/main_home_screen.dart';
+
+
+import 'package:doctor_appointment/screens/all_home_screens/main_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

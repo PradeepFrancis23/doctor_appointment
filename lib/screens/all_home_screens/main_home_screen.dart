@@ -1,9 +1,13 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
-import 'package:doctor_appointment/appointment_day_select_screen.dart';
-import 'package:doctor_appointment/card_widget.dart';
+
+
 import 'package:doctor_appointment/models/doctors_model.dart';
-import 'package:doctor_appointment/screens/doctors_list.dart';
-import 'package:doctor_appointment/screens/doctors_profile.dart';
+import 'package:doctor_appointment/screens/appointments_status_check/appointment_day_select_screen.dart';
+import 'package:doctor_appointment/screens/doctors_info_screens/doctors_list.dart';
+import 'package:doctor_appointment/screens/doctors_info_screens/doctors_profile.dart';
+import 'package:doctor_appointment/widgets/card_widget.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';

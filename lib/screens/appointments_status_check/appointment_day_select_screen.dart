@@ -1,5 +1,6 @@
-import 'package:doctor_appointment/card_widget.dart';
 
+
+import 'package:doctor_appointment/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 
 class AppoinmentScreen extends StatefulWidget {

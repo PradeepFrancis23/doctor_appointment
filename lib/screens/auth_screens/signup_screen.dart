@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:doctor_appointment/screens/login_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:doctor_appointment/services/signup_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -20,6 +21,8 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmpasswordController = TextEditingController();
+  RoundedLoadingButtonController signUpbutnController =
+      RoundedLoadingButtonController();
   final GlobalKey<FormState> _signupFormKey = GlobalKey<FormState>();
 
   SharedPreferences? _sharedPreferences;
@@ -97,17 +100,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                 label: "Full Name",
                                 controller: fullnamecontroller,
                                 validator: (value) {
-                                  if (fullnamecontroller.text.isValidName) {
-                                    print('fullname emty');
-                                    return 'Enter valid name';
+                                  if (fullnamecontroller.text.isEmpty) {
+                                    return "Enter Valid Name";
                                   }
                                 }),
                             makeInput(
                                 label: "Phone Number",
                                 controller: phonenumber,
                                 validator: (value) {
-                                  if (phonenumber.text.isValidPhone) {
-                                    print('phone npo emty');
+                                  if (phonenumber.text.isEmpty) {
                                     return 'Enter Valida Phone Number';
                                   }
                                 }),
@@ -115,7 +116,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 label: "Email",
                                 controller: emailController,
                                 validator: (value) {
-                                  if (emailController.text.isValidEmail) {
+                                  if (emailController.text.isEmpty) {
                                     print('email emty');
                                     return 'Enter valid Email';
                                   }
@@ -125,8 +126,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 obsureText: true,
                                 controller: passwordController,
                                 validator: (value) {
-                                  if (passwordController.text.isValidPassword) {
-                                    print('passw emty');
+                                  if (passwordController.text.isEmpty) {
                                     return 'Enter Valid Password';
                                   }
                                 }),
@@ -135,9 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 obsureText: true,
                                 controller: confirmpasswordController,
                                 validator: (value) {
-                                  if (confirmpasswordController
-                                      .text.isValidConfirmPassword) {
-                                    print('confirmpass emty');
+                                  if (confirmpasswordController.text.isEmpty) {
                                     return 'Enter Valid Confirm Password';
                                   }
                                 })
@@ -145,38 +143,52 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 3, left: 3),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40),
-                            border: const Border(
-                                bottom: BorderSide(color: Colors.black),
-                                top: BorderSide(color: Colors.black),
-                                right: BorderSide(color: Colors.black),
-                                left: BorderSide(color: Colors.black))),
-                        child: MaterialButton(
-                          minWidth: double.infinity,
-                          height: 60,
-                          onPressed: () {
-                            // **login screen
-                            _submit();
-                            storeSignupData();
-                          },
-                          color: Colors.redAccent,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40)),
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
+                    RoundedLoadingButton(
+                        color: Colors.redAccent,
+                        controller: signUpbutnController,
+                        onPressed: () {
+                          _submit();
+                          storeSignupData();
+                        },
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
                           ),
-                        ),
-                      ),
-                    ),
+                        )),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 40),
+                    //   child: Container(
+                    //     padding: const EdgeInsets.only(top: 3, left: 3),
+                    //     decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(40),
+                    //         border: const Border(
+                    //             bottom: BorderSide(color: Colors.black),
+                    //             top: BorderSide(color: Colors.black),
+                    //             right: BorderSide(color: Colors.black),
+                    //             left: BorderSide(color: Colors.black))),
+                    //     child: MaterialButton(
+                    //       minWidth: double.infinity,
+                    //       height: 60,
+                    //       onPressed: () {
+                    //         // **login screen
+                    //         _submit();
+                    //         storeSignupData();
+                    //       },
+                    //       color: Colors.redAccent,
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(40)),
+                    //       child: const Text(
+                    //         "Sign Up",
+                    //         style: TextStyle(
+                    //           fontWeight: FontWeight.w600,
+                    //           fontSize: 16,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -192,10 +204,19 @@ class _SignupScreenState extends State<SignupScreen> {
                                   builder: (context) => const LoginScreen()),
                             );
                           },
-                          child: const Text(
-                            "Login",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()),
+                                  (route) => false);
+                            },
+                            child: const Text(
+                              "Login",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 18),
+                            ),
                           ),
                         ),
                       ],
@@ -275,7 +296,7 @@ extension Extstring on String {
 
   bool get isValidName {
     final nameRegExp =
-        new RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
+        RegExp(r"^\s*([A-Za-z]{1,}([\.,] |[-']| ))+[A-Za-z]+\.?\s*$");
     return nameRegExp.hasMatch(this);
   }
 

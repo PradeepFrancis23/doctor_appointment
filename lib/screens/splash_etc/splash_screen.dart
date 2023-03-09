@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:doctor_appointment/screens/login_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-        const Duration(seconds: 6),
+        const Duration(seconds: 4),
         () => Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const LoginScreen())));
   }
@@ -31,23 +31,15 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Center(
             child: Text(
               ' Step3 klinic ',
-              style: GoogleFonts.lobster(
+              style: GoogleFonts.lato(
                 textStyle: const TextStyle(
                     fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w400,
                     color: Color.fromARGB(255, 239, 243, 245),
                     letterSpacing: .5),
               ),
-              // GoogleFonts.Roboto(
-              //   textStyle: const TextStyle(
-              //       fontSize: 25,
-              //       fontWeight: FontWeight.bold,
-              //       color: Color.fromARGB(255, 239, 243, 245),
-              //       letterSpacing: .5),
-              // ),
             ),
           ),
-          
         ));
   }
 }
