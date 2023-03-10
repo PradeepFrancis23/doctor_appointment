@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:doctor_appointment/screens/auth_screens/home_login_signup.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -19,8 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
         const Duration(seconds: 4),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LoginScreen())));
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const Home())));
   }
 
   @override

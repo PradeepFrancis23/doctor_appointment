@@ -1,10 +1,16 @@
+import 'dart:async';
 import 'dart:convert';
 
+import 'package:doctor_appointment/screens/all_home_screens/main_home_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_event.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_state.dart';
 import 'package:doctor_appointment/screens/auth_screens/signup_screen.dart';
 import 'package:doctor_appointment/screens/password_auth/otp_verification_screen.dart';
 import 'package:doctor_appointment/screens/patients_info/pateint_credentials.dart';
 
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -19,7 +25,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String fullname;
+  final String address;
+  final String email;
+  final String password;
+
+  const LoginScreen(
+      {super.key,
+      required this.fullname,
+      required this.address,
+      required this.email,
+      required this.password});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -112,36 +128,114 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Column(
-                    children: [
-                      makeInput(label: "Email", controller: emailController),
-                      makeInput(
-                          label: "Password",
-                          obsureText: true,
-                          controller: passwordController),
-                    ],
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        BlocBuilder<LoginBloc, SignInState>(
+                          builder: (context, state) {
+                            if (state is ErrorState) {
+                              return const Text(
+                                "Please Enter Valid Email !!",
+                                style: TextStyle(color: Colors.red),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        makeInput(
+                            label: "Email",
+                            controller: emailController,
+                            onchanged: (val) {
+                              if (emailController.text == widget.email) {
+                                BlocProvider.of<LoginBloc>(context).add(
+                                    SignInTextChangingEvent(
+                                        emailController.text,
+                                        passwordController.text));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('InValid Email')));
+                              }
+                            }),
+                        makeInput(
+                            label: "Password",
+                            obsureText: true,
+                            controller: passwordController,
+                            onchanged: (val) {
+                              if (passwordController.text == widget.password) {
+                                BlocProvider.of<LoginBloc>(context).add(
+                                    SignInTextChangingEvent(
+                                        emailController.text,
+                                        passwordController.text));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text('InValid Password')));
+                              }
+                            }),
+                      ],
+                    ),
                   ),
                 ),
 
-                RoundedLoadingButton(
-                    color: Colors.indigoAccent[400],
-                    controller: loginbutnController,
-                    onPressed: () {
-                      storeloginData();
-                    },
-                    child: const Text(
-                      "login",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: Colors.white70),
-                    )),
+                BlocBuilder<LoginBloc, SignInState>(
+                  builder: (context, state) {
+                    // TODO WOrk on success indiactor and error incdicator
+                    // if (state is SigninLoadingState) {
+                    //   loginbutnController.start();
+                    // }
+
+                    return RoundedLoadingButton(
+                        successColor: Colors.green,
+                        successIcon: Icons.check,
+                        errorColor: Colors.red,
+                        failedIcon: Icons.close,
+                        color: (state is ValidState)
+                            ? Colors.indigoAccent[400]
+                            : Colors.grey,
+                        controller: loginbutnController,
+                        onPressed: () {
+                          BlocProvider.of<LoginBloc>(context).add(
+                              SignInSubmittedEvent(emailController.text,
+                                  passwordController.text));
+                          if (state is ValidState &&
+                              _formKey.currentState!.validate()) {
+                            Timer(const Duration(milliseconds: 15), () {
+                              loginbutnController.success();
+                              storeloginData();
+
+                              print('0');
+                            });
+                          } else if (state is InvalidState) {
+                            print('2');
+                            Timer(const Duration(milliseconds: 15), () {
+                              loginbutnController.error();
+                              loginbutnController.reset();
+                            });
+                          }
+                          print('3');
+                          loginbutnController.reset();
+                        },
+                        child: const Text(
+                          "login",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: Colors.white70),
+                        ));
+                  },
+                ),
 
                 const SizedBox(
                   height: 20,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text("Dont have an account?  "),
                     InkWell(
@@ -275,6 +369,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void storeloginData() async {
+    // if(emailController.textzz && passwordController.text.isNotEmpty){
+
+    // }
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       var response = await http.post(Uri.parse("https://reqres.in/api/login"),
           body: ({
@@ -305,8 +402,10 @@ class _LoginScreenState extends State<LoginScreen> {
     // ignore: use_build_context_synchronously
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (context) => PatientCredentials(
+            builder: (context) => HomeScreen(
+                  address: '',
                   email: emailController.text,
+                  fullname: '',
                 )),
         (route) => false);
     // _sharedPreferences = await SharedPreferences.getInstance();
@@ -324,7 +423,7 @@ void _otpSend(String mobileNumber) {
   // TODO
 }
 
-Widget makeInput({label, obsureText = false, controller}) {
+Widget makeInput({label, obsureText = false, controller, onchanged}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -337,6 +436,7 @@ Widget makeInput({label, obsureText = false, controller}) {
         height: 5,
       ),
       TextField(
+        onChanged: onchanged,
         controller: controller,
         obscureText: obsureText,
         decoration: const InputDecoration(
@@ -350,7 +450,7 @@ Widget makeInput({label, obsureText = false, controller}) {
       ),
       const SizedBox(
         height: 30,
-      )
+      ),
     ],
   );
 }

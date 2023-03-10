@@ -1,15 +1,15 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:doctor_appointment/screens/appointments_status_check/appointment_day_select_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
 
 import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_list.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_profile.dart';
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PatientCredentials extends StatefulWidget {
@@ -141,7 +141,10 @@ class _PatientCredentialsState extends State<PatientCredentials> {
 
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
+                            builder: (context) => BlocProvider(
+                                  create: (context) => LoginBloc(),
+                                  child: LoginScreen(address: '', email: '', fullname: '', password: '',),
+                                )),
                         (route) => false);
                   },
                 ),

@@ -62,7 +62,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                     // Login screen
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
+                            builder: (context) =>  LoginScreen(address: '', email: '', fullname: '', password: '',)),
                         (route) => false);
                   },
                   child: const Text('Set Password'))

@@ -1,19 +1,24 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 
-
 import 'package:doctor_appointment/models/doctors_model.dart';
 import 'package:doctor_appointment/screens/appointments_status_check/appointment_day_select_screen.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_list.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_profile.dart';
 import 'package:doctor_appointment/widgets/card_widget.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class HomeScreen extends StatefulWidget {
-  const    HomeScreen({super.key});
+  final String email;
+  final String fullname;
+  final String address;
+  const HomeScreen(
+      {super.key,
+      required this.email,
+      required this.fullname,
+      required this.address});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-     darkTheme:
+    darkTheme:
     ThemeData.dark().copyWith(
       appBarTheme: AppBarTheme(color: const Color(0xFF253341)),
       scaffoldBackgroundColor: const Color(0xFF15202B),
@@ -50,22 +55,23 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(15.0),
             child: ListView(
               children: [
-                const DrawerHeader(
+                DrawerHeader(
                   // decoration: BoxDecoration(
                   //   color: Colors.green,
                   // ), //BoxDecoration
                   child: UserAccountsDrawerHeader(
                     decoration: BoxDecoration(color: Colors.transparent),
                     accountName: Text(
-                      "Clinic Name",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      widget.fullname,
+                      style: const TextStyle(fontSize: 18, color: Colors.black),
                     ),
                     accountEmail: Text(
-                      "abhishekm977@gmail.com",
+                      widget.email,
                       style: TextStyle(color: Colors.black),
                     ),
+  
                     currentAccountPictureSize: Size.square(50),
-                    currentAccountPicture: CircleAvatar(
+                    currentAccountPicture: const CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 165, 255, 137),
                       child: Text(
                         // **logo
