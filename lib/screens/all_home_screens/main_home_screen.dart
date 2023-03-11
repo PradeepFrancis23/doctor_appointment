@@ -2,13 +2,17 @@ import 'package:day_night_switcher/day_night_switcher.dart';
 
 import 'package:doctor_appointment/models/doctors_model.dart';
 import 'package:doctor_appointment/screens/appointments_status_check/appointment_day_select_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_list.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_profile.dart';
 import 'package:doctor_appointment/widgets/card_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
   final String email;
@@ -69,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       widget.email,
                       style: TextStyle(color: Colors.black),
                     ),
-  
+
                     currentAccountPictureSize: Size.square(50),
                     currentAccountPicture: const CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 165, 255, 137),
@@ -128,7 +132,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   leading: const Icon(Icons.logout),
                   title: const Text('LogOut'),
                   onTap: () {
-                    Navigator.pop(context);
+                    FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                            email: widget.email, password: '')
+                        .then((value) async {
+                      print("logged out");
+
+                      // SharedPreferences pref =
+                      //     await SharedPreferences.getInstance();
+                      // await pref.clear();
+                      const Duration(milliseconds: 1500);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Logged out')));
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => BlocProvider(
+                                    create: (context) => LoginBloc(),
+                                    child: const LoginScreen(
+                                      address: '',
+                                      email: '',
+                                      fullname: '',
+                                      password: '',
+                                    ),
+                                  )),
+                          (route) => false);
+                    }).onError((error, stackTrace) {
+                      print("${error.toString()}");
+                    });
                   },
                 ),
               ],

@@ -5,6 +5,7 @@ import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.da
 import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_list.dart';
 import 'package:doctor_appointment/screens/doctors_info_screens/doctors_profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -132,6 +133,13 @@ class _PatientCredentialsState extends State<PatientCredentials> {
                   leading: const Icon(Icons.logout),
                   title: const Text('Logout'),
                   onTap: () async {
+                       FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: '',
+                                  password: '')
+                              .then((value) async {
+                            print("logged out");
+                    
                     SharedPreferences pref =
                         await SharedPreferences.getInstance();
                     await pref.clear();
@@ -146,6 +154,9 @@ class _PatientCredentialsState extends State<PatientCredentials> {
                                   child: LoginScreen(address: '', email: '', fullname: '', password: '',),
                                 )),
                         (route) => false);
+                         }).onError((error, stackTrace) {
+                            print("${error.toString()}");
+                          });
                   },
                 ),
               ],

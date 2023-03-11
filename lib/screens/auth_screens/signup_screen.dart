@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:doctor_appointment/services/signup_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -144,9 +145,18 @@ class _SignupScreenState extends State<SignupScreen> {
                   color: Colors.redAccent,
                   controller: signUpbutnController,
                   onPressed: () {
-                    _submit();
-                    storeSignupData();
-                    signUpbutnController.reset();
+                    FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passwordController.text)
+                        .then((value) {
+                      print("Created Acct");
+                      _submit();
+                      storeSignupData();
+                      signUpbutnController.reset();
+                    }).onError((error, stackTrace) {
+                      print("${error.toString()}");
+                    });
                   },
                   child: const Text(
                     "Sign Up",
@@ -170,7 +180,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             builder: (context) => LoginScreen(
                                   address: '',
                                   email: emailController.text,
-                                  fullname: fullnamecontroller.text, password: passwordController.text,
+                                  fullname: fullnamecontroller.text,
+                                  password: passwordController.text,
                                 )),
                       );
                     },
@@ -181,7 +192,8 @@ class _SignupScreenState extends State<SignupScreen> {
                                 builder: (context) => LoginScreen(
                                       address: '',
                                       email: emailController.text,
-                                      fullname: fullnamecontroller.text, password: passwordController.text,
+                                      fullname: fullnamecontroller.text,
+                                      password: passwordController.text,
                                     )),
                             (route) => false);
                       },
@@ -230,7 +242,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: LoginScreen(
                         address: '',
                         email: emailController.text,
-                        fullname: fullnamecontroller.text, password: passwordController.text,
+                        fullname: fullnamecontroller.text,
+                        password: passwordController.text,
                       ),
                     )),
             (route) => false);

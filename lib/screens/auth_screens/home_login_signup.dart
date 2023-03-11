@@ -67,7 +67,7 @@ class Home extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => BlocProvider(
                                         create: (context) => LoginBloc(),
-                                        child: LoginScreen(address: '', email: '', fullname: '', password: '',),
+                                        child: const LoginScreen(address: '', email: '', fullname: '', password: '',),
                                       )),
                             );
                             loginbtnController.reset();

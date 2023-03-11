@@ -1,28 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:doctor_appointment/screens/all_home_screens/main_home_screen.dart';
+import 'package:doctor_appointment/authentication/controllers/login_controllers.dart';
+
 import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_event.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_state.dart';
 import 'package:doctor_appointment/screens/auth_screens/signup_screen.dart';
 import 'package:doctor_appointment/screens/password_auth/otp_verification_screen.dart';
 import 'package:doctor_appointment/screens/patients_info/pateint_credentials.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
-import 'package:doctor_appointment/services/users.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:path/path.dart' as Path;
+
+// import 'package:path/path.dart' as Path;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class LoginScreen extends StatefulWidget {
   final String fullname;
@@ -43,12 +40,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  RoundedLoadingButtonController loginbutnController =
-      RoundedLoadingButtonController();
+  final controllers = LogInControllers();
 
   SharedPreferences? _sharedPreferences;
 
@@ -149,34 +141,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         makeInput(
                             label: "Email",
-                            controller: emailController,
+                            controller: controllers.emailController,
                             onchanged: (val) {
-                              if (emailController.text == widget.email) {
-                                BlocProvider.of<LoginBloc>(context).add(
-                                    SignInTextChangingEvent(
-                                        emailController.text,
-                                        passwordController.text));
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('InValid Email')));
-                              }
+                              // if (emailController.text == widget.email) {
+                              BlocProvider.of<LoginBloc>(context).add(
+                                  SignInTextChangingEvent(
+                                      controllers.emailController.text,
+                                      controllers.passwordController.text));
+                              // } else {
+                              //   ScaffoldMessenger.of(context).showSnackBar(
+                              //       const SnackBar(
+                              //           content: Text('InValid Email')));
+                              // }
                             }),
                         makeInput(
                             label: "Password",
                             obsureText: true,
-                            controller: passwordController,
+                            controller: controllers.passwordController,
                             onchanged: (val) {
-                              if (passwordController.text == widget.password) {
-                                BlocProvider.of<LoginBloc>(context).add(
-                                    SignInTextChangingEvent(
-                                        emailController.text,
-                                        passwordController.text));
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text('InValid Password')));
-                              }
+                              // if (passwordController.text == widget.password) {
+                              BlocProvider.of<LoginBloc>(context).add(
+                                  SignInTextChangingEvent(
+                                      controllers.emailController.text,
+                                      controllers.passwordController.text));
+                              // } else {
+                              //   ScaffoldMessenger.of(context).showSnackBar(
+                              //       const SnackBar(
+                              //           content: Text('InValid Password')));
+                              // }
                             }),
                       ],
                     ),
@@ -198,28 +190,39 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: (state is ValidState)
                             ? Colors.indigoAccent[400]
                             : Colors.grey,
-                        controller: loginbutnController,
+                        controller: controllers.loginbutnController,
                         onPressed: () {
-                          BlocProvider.of<LoginBloc>(context).add(
-                              SignInSubmittedEvent(emailController.text,
-                                  passwordController.text));
-                          if (state is ValidState &&
-                              _formKey.currentState!.validate()) {
-                            Timer(const Duration(milliseconds: 15), () {
-                              loginbutnController.success();
-                              storeloginData();
+                          FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: controllers.emailController.text,
+                                  password: controllers.passwordController.text)
+                              .then((value) {
+                            print("logged in");
+                            BlocProvider.of<LoginBloc>(context).add(
+                                SignInSubmittedEvent(
+                                    controllers.emailController.text,
+                                    controllers.passwordController.text));
+                            if (state is ValidState &&
+                                _formKey.currentState!.validate()) {
+                              Timer(const Duration(milliseconds: 15), () {
+                                controllers.loginbutnController.success();
+                                // storeloginData();
+                                controllers.loginuser;
 
-                              print('0');
-                            });
-                          } else if (state is InvalidState) {
-                            print('2');
-                            Timer(const Duration(milliseconds: 15), () {
-                              loginbutnController.error();
-                              loginbutnController.reset();
-                            });
-                          }
-                          print('3');
-                          loginbutnController.reset();
+                                print('0');
+                              });
+                            } else if (state is InvalidState) {
+                              print('2');
+                              Timer(const Duration(milliseconds: 15), () {
+                                controllers.loginbutnController.error();
+                                controllers.loginbutnController.reset();
+                              });
+                            }
+                            print('3');
+                            controllers.loginbutnController.reset();
+                          }).onError((error, stackTrace) {
+                            print("${error.toString()}");
+                          });
                         },
                         child: const Text(
                           "login",
@@ -235,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 20,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Dont have an account?  "),
                     InkWell(
@@ -271,7 +274,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                   top: -40.0,
                                   child: InkResponse(
                                     onTap: () {
-                                      Navigator.of(context).pop();
+                                      // if (_formKey.currentState!.validate()) {
+                                      print('sendotp');
+                                      controllers.instancePhoneAuth
+                                          .phoneAuthentication(controllers
+                                              .phoneNumberController.text
+                                              .trim());
+                                      // }
                                     },
                                     child: const CircleAvatar(
                                       backgroundColor: Colors.red,
@@ -280,15 +289,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 Form(
-                                  key: _formKey,
+                                  // key: _formKey,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: TextFormField(
-                                              controller:
-                                                  _phoneNumberController,
+                                              controller: controllers
+                                                  .phoneNumberController,
                                               keyboardType:
                                                   TextInputType.number,
                                               inputFormatters: <
@@ -307,37 +316,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                         child: ElevatedButton(
                                           child: const Text("Send OTP"),
                                           onPressed: () {
+                                            print('sendotp2');
+                                            controllers.instancePhoneAuth
+                                                .phoneAuthentication(controllers
+                                                    .phoneNumberController.text
+                                                    .trim());
                                             Navigator.of(context)
                                                 .pushAndRemoveUntil(
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             const OTPVerification()),
                                                     (route) => false);
-
-                                            // if (_phoneNumberController
-                                            //             .text.length !=
-                                            //         10 ||
-                                            //     _phoneNumberController.text
-                                            //         .startsWith(
-                                            //             RegExp(r'[0-5]'))) {
-                                            //   Future.delayed(
-                                            //       Duration(milliseconds: 2000),
-                                            //       () {
-                                            //     EasyLoading.showError('Oops!!',
-                                            //         duration: const Duration(
-                                            //             milliseconds: 1500));
-                                            //     ScaffoldMessenger.of(context)
-                                            //         .showSnackBar(const SnackBar(
-                                            //             content: Text(
-                                            //                 "Enter Valid Number")));
-                                            //   });
-                                            // } else {
-                                            //   EasyLoading.show(
-                                            //       status: 'loading');
-                                            //   _otpSend(
-                                            //       _phoneNumberController.text);
-                                            // }
-                                            // EasyLoading.dismiss();
                                           },
                                         ),
                                       )
@@ -367,60 +356,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  void storeloginData() async {
-    // if(emailController.textzz && passwordController.text.isNotEmpty){
-
-    // }
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      var response = await http.post(Uri.parse("https://reqres.in/api/login"),
-          body: ({
-            "email": emailController.text,
-            "password": passwordController.text
-          }));
-      if (response.statusCode == 200) {
-        // success code
-        final body = jsonDecode(response.body);
-        // ignore: use_build_context_synchronously
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Token : ${body['token']}")));
-        initializedGetSavedData(body['token']);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Invalid Crendentials")));
-      }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Blank Value Found')));
-    }
-  }
-
-  void initializedGetSavedData(String token) async {
-    // we store val or token inside sharepref
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString('login', token);
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-            builder: (context) => HomeScreen(
-                  address: '',
-                  email: emailController.text,
-                  fullname: '',
-                )),
-        (route) => false);
-    // _sharedPreferences = await SharedPreferences.getInstance();
-  }
-
-  // Method to validate the email the take
-// the user email as an input and
-// print the bool value in the console.
-  // void Validate(String email) {
-  //   bool isvalid = EmailValidator.validate(email);
-  // }
-}
-
-void _otpSend(String mobileNumber) {
-  // TODO
 }
 
 Widget makeInput({label, obsureText = false, controller, onchanged}) {
