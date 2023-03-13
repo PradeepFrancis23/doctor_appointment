@@ -1,3 +1,4 @@
+import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:doctor_appointment/screens/auth_screens/signup_screen.dart';
@@ -10,6 +11,7 @@ import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class Home extends StatelessWidget {
+    // bool isDarkModeEnabled = false;
   const Home({super.key});
 
   @override
@@ -19,6 +21,14 @@ class Home extends StatelessWidget {
     RoundedLoadingButtonController signupController =
         RoundedLoadingButtonController();
     return Scaffold(
+      // appBar: AppBar(
+      //    actions: [
+      //     DayNightSwitcher(
+      //       isDarkModeEnabled: isDarkModeEnabled,
+      //       onStateChanged: onStateChanged,
+      //     ),
+      //    ],
+      // ),
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -128,4 +138,10 @@ class Home extends StatelessWidget {
       ),
     );
   }
+
+  // onStateChanged(bool isDarkModeEnabled) {
+    
+  //     this.isDarkModeEnabled = isDarkModeEnabled;
+  
+  // }
 }

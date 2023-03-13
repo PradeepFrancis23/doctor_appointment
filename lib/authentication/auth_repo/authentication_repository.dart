@@ -8,18 +8,22 @@ class AuthenticationRepository {
   final _auth = FirebaseAuth.instance;
   var verificationId = "";
 
-  Future<void> phoneAuthentication(String phoneNumber) async {
+  Future<void> phoneAuthentication(String phoneNumber, context) async {
     await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
+        phoneNumber: "+91$phoneNumber",
         verificationCompleted: (credential) async {
           await _auth.signInWithCredential(credential);
         },
         verificationFailed: (e) {
           if (e.code == "invalid-phone-number") {
-                // TODO context
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //     const SnackBar(content: Text("Error,Number Invalid")));
+            // TODO context
+            print(e.toString());
+            print('err1');
+            //  ScaffoldMessenger.of(context).showSnackBar(
+            //       const SnackBar(content: Text("Error,Number Invalid")));
           } else {
+            print(e.toString());
+            print('2');
             // ScaffoldMessenger.of(context).showSnackBar(
             //     const SnackBar(content: Text("Something Went Wrong")));
           }

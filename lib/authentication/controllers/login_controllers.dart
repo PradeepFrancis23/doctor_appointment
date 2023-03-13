@@ -17,20 +17,20 @@ class LogInControllers {
   var instancePhoneAuth = AuthenticationRepository();
 
   //  loginbtn
-  void loginuser() async {
+  void loginuser(context) async {
     // TODO context
-    // Navigator.of(context).pushAndRemoveUntil(
-    //     MaterialPageRoute(
-    //         builder: (context) => HomeScreen(
-    //               address: '',
-    //               email: emailController.text,
-    //               fullname: '',
-    //             )),
-    //     (route) => false);
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+            builder: (context) => HomeScreen(
+                  address: '',
+                  email: emailController.text,
+                  fullname: '', password: '',
+                )),
+        (route) => false);
     // _sharedPreferences = await SharedPreferences.getInstance();
   }
 
   void phoneAuth(String phoneNo) {
-    instancePhoneAuth.phoneAuthentication(phoneNo);
+    instancePhoneAuth.phoneAuthentication(phoneNo,context);
   }
 }

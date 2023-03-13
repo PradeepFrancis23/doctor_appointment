@@ -47,7 +47,7 @@ dependencies:
   email_validator: 
   bloc: ^8.1.1
   flutter_bloc: ^8.1.2
-  equatable: ^0.1.6
+  equatable: ^2.0.5
   http: ^0.13.5
   pin_code_fields: ^7.4.0
   flutter_easyloading: ^3.0.5

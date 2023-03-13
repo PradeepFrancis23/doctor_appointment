@@ -37,7 +37,9 @@ class _OTPVerificationState extends State<OTPVerification> {
               OtpInput(controllers.fieldOne, true), // auto focus
               OtpInput(controllers.fieldTwo, false),
               OtpInput(controllers.fieldThree, false),
-              OtpInput(controllers.fieldFour, false)
+              OtpInput(controllers.fieldFour, false),
+              OtpInput(controllers.fieldfive, false),
+              OtpInput(controllers.fieldsix, false),
             ],
           ),
           const SizedBox(
@@ -47,17 +49,25 @@ class _OTPVerificationState extends State<OTPVerification> {
           RoundedLoadingButton(
               controller: controllers.submitOtp,
               onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => const NewPasswordScreen()),
-                    (route) => false);
-                setState(() {
-                  _otp = controllers.fieldOne.text +
-                      controllers.fieldTwo.text +
-                      controllers.fieldThree.text +
-                      controllers.fieldFour.text;
-                });
-                instanceAuthRepo.verifyOtp(_otp.toString());
+                try {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => const NewPasswordScreen()),
+                      (route) => false);
+                  setState(() {
+                    _otp = controllers.fieldOne.text +
+                        controllers.fieldTwo.text +
+                        controllers.fieldThree.text +
+                        controllers.fieldFour.text +
+                        controllers.fieldfive.text +
+                        controllers.fieldsix.text;
+                  });
+                  instanceAuthRepo.verifyOtp(_otp.toString());
+                } catch (e) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(e.toString())));
+                  controllers.submitOtp.reset();
+                }
               },
               child: const Text("Submit Otp")),
           const SizedBox(
@@ -68,28 +78,6 @@ class _OTPVerificationState extends State<OTPVerification> {
             _otp ?? 'Please enter OTP',
             style: const TextStyle(fontSize: 30),
           ),
-          // ElevatedButton(
-          //     onPressed: () {
-          //       Navigator.of(context).pushAndRemoveUntil(
-          //           MaterialPageRoute(
-          //               builder: (context) => const NewPasswordScreen()),
-          //           (route) => false);
-          //       setState(() {
-          //         _otp = controllers.fieldOne.text +
-          //             controllers.fieldTwo.text +
-          //             controllers.fieldThree.text +
-          //             controllers.fieldFour.text;
-          //       });
-          //     },
-          //     child: const Text('Submit')),
-          // const SizedBox(
-          //   height: 30,
-          // ),
-          // // Display the entered OTP code
-          // Text(
-          //   _otp ?? 'Please enter OTP',
-          //   style: const TextStyle(fontSize: 30),
-          // )
         ],
       ),
     );

@@ -9,39 +9,40 @@ import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:path/path.dart' as path;
 
-
 class OtpController {
   final TextEditingController fieldOne = TextEditingController();
   final TextEditingController fieldTwo = TextEditingController();
   final TextEditingController fieldThree = TextEditingController();
   final TextEditingController fieldFour = TextEditingController();
+  final TextEditingController fieldfive = TextEditingController();
+  final TextEditingController fieldsix = TextEditingController();
   final RoundedLoadingButtonController submitOtp =
       RoundedLoadingButtonController();
 
   final instanceAuthRepo = AuthenticationRepository();
 
-  void verifyOtp(String otp) async {
-        // TODO context
+  void verifyOtp(String otp, context) async {
+    // TODO context
     var isVerified = await instanceAuthRepo.verifyOtp(otp);
-    // isVerified
-    //     ? Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //             builder: (context) => BlocProvider(
-    //                   create: (context) => LoginBloc(),
-    //                   child: const LoginScreen(
-    //                     address: '',
-    //                     email: '',
-    //                     fullname: '',
-    //                     password: '',
-    //                   ),
-    //                 )),
-    //       )
-    //     : Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (context) => const OTPVerification(),
-    //         ),
-    //       );
+    isVerified
+        ? Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BlocProvider(
+                      create: (context) => LoginBloc(),
+                      child: const LoginScreen(
+                        address: '',
+                        email: '',
+                        fullname: '',
+                        password: '',
+                      ),
+                    )),
+          )
+        : Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OTPVerification(),
+            ),
+          );
   }
 }

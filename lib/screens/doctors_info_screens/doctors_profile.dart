@@ -302,7 +302,7 @@ class _DoctorsProfileState extends State<DoctorsProfile> {
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>   HomeScreen(address: '', email: '', fullname: '',)));
+                          builder: (context) =>   HomeScreen(address: '', email: '', fullname: '', password: '',)));
                 },
                 child: const Text('Confirm Appointment'),
               ),

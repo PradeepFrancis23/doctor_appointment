@@ -18,11 +18,13 @@ class HomeScreen extends StatefulWidget {
   final String email;
   final String fullname;
   final String address;
+  final String password;
   const HomeScreen(
       {super.key,
       required this.email,
       required this.fullname,
-      required this.address});
+      required this.address,
+      required this.password});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -131,35 +133,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 ListTile(
                   leading: const Icon(Icons.logout),
                   title: const Text('LogOut'),
-                  onTap: () {
-                    FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                            email: widget.email, password: '')
-                        .then((value) async {
-                      print("logged out");
+                  onTap: () async {
+                    // progress indicator
+                    try {
+                      await FirebaseAuth.instance.signOut().then((value) async {
+                        const Duration(milliseconds: 1500);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Logged out')));
 
-                      // SharedPreferences pref =
-                      //     await SharedPreferences.getInstance();
-                      // await pref.clear();
-                      const Duration(milliseconds: 1500);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Logged out')));
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => BlocProvider(
+                                      create: (context) => LoginBloc(),
+                                      child: const LoginScreen(
+                                        address: '',
+                                        email: '',
+                                        fullname: '',
+                                        password: '',
+                                      ),
+                                    )),
+                            (route) => false);
 
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (context) => BlocProvider(
-                                    create: (context) => LoginBloc(),
-                                    child: const LoginScreen(
-                                      address: '',
-                                      email: '',
-                                      fullname: '',
-                                      password: '',
-                                    ),
-                                  )),
-                          (route) => false);
-                    }).onError((error, stackTrace) {
-                      print("${error.toString()}");
-                    });
+                        // SharedPreferences pref =
+                        //     await SharedPreferences.getInstance();
+                        // await pref.clear();
+                      }).onError((error, stackTrace) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(error.toString())));
+                        print('err1');
+                        print("${error.toString()}");
+                      });
+                    } catch (e) {
+                      print('er2cartch');
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                    // dispose progress indicator byu navigatort pop
                   },
                 ),
               ],
