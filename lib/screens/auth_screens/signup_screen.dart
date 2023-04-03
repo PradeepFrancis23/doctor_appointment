@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
+import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_state.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
 import 'package:doctor_appointment/services/signup_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -85,7 +86,21 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(
                     height: 30,
-                  )
+                  ),
+                  // error show text
+                  // TODO signup
+                  BlocBuilder<LoginBloc, SignInState>(
+                    builder: (context, state) {
+                      if (state is ErrorState) {
+                        return Text(
+                          state.errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                 ],
               ),
               Padding(
@@ -107,7 +122,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           controller: phonenumber,
                           validator: (value) {
                             if (phonenumber.text.isEmpty) {
-                              return 'Enter Valida Phone Number';
+                              return 'Enter Valid Phone Number';
                             }
                           }),
                       makeInput(
@@ -189,11 +204,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       onTap: () {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                                builder: (context) => LoginScreen(
-                                      address: '',
-                                      email: emailController.text,
-                                      fullname: fullnamecontroller.text,
-                                      password: passwordController.text,
+                                builder: (context) => BlocProvider(
+                                      create: (context) => LoginBloc(),
+                                      child: LoginScreen(
+                                        address: '',
+                                        email: emailController.text,
+                                        fullname: fullnamecontroller.text,
+                                        password: passwordController.text,
+                                      ),
                                     )),
                             (route) => false);
                       },

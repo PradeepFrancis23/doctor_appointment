@@ -23,7 +23,7 @@ List<Widget>? buildActions(BuildContext context) {
 		onPressed: () {
 		query = '';
 		},
-		icon: Icon(Icons.clear),
+		icon: const Icon(Icons.clear),
 	),
 	];
 }
@@ -35,7 +35,7 @@ Widget? buildLeading(BuildContext context) {
 	onPressed: () {
 		close(context, null);
 	},
-	icon: Icon(Icons.arrow_back),
+	icon: const Icon(Icons.arrow_back),
 	);
 }
 

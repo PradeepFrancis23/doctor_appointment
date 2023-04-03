@@ -1,6 +1,7 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_bloc/login_bloc.dart';
 import 'package:doctor_appointment/screens/auth_screens/login_screen.dart';
+import 'package:doctor_appointment/screens/auth_screens/signup_bloc/signup_bloc.dart';
 import 'package:doctor_appointment/screens/auth_screens/signup_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import 'package:path/path.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class Home extends StatelessWidget {
-    // bool isDarkModeEnabled = false;
+  // bool isDarkModeEnabled = false;
   const Home({super.key});
 
   @override
@@ -77,7 +78,12 @@ class Home extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => BlocProvider(
                                         create: (context) => LoginBloc(),
-                                        child: const LoginScreen(address: '', email: '', fullname: '', password: '',),
+                                        child: const LoginScreen(
+                                          address: '',
+                                          email: '',
+                                          fullname: '',
+                                          password: '',
+                                        ),
                                       )),
                             );
                             loginbtnController.reset();
@@ -111,7 +117,10 @@ class Home extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const SignupScreen()),
+                                  builder: (context) => BlocProvider(
+                                        create: (context) => SingUpBloc(),
+                                        child: const SignupScreen(),
+                                      )),
                             );
                             signupController.reset();
                           },
@@ -140,8 +149,8 @@ class Home extends StatelessWidget {
   }
 
   // onStateChanged(bool isDarkModeEnabled) {
-    
+
   //     this.isDarkModeEnabled = isDarkModeEnabled;
-  
+
   // }
 }
